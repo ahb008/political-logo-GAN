@@ -1,7 +1,8 @@
 import requests
 import urllib
 import time
-import shutil
+from PIL import Image
+
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
@@ -13,7 +14,9 @@ driver = webdriver.Chrome(executable_path="/Users/andrewbass/Desktop/bad_answers
 
 
 driver.get(capdURL)
-time.sleep(1)
+time.sleep(10)
+
+driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
 page_source = driver.page_source
 soup = BeautifulSoup(page_source, 'html.parser')
@@ -22,11 +25,14 @@ soup = BeautifulSoup(page_source, 'html.parser')
 imageGallery = soup.find('div', 'gallery__medium')
 images = imageGallery.findAll("img")
 
-#Downloads images using src
-for idx, image in enumerate(images):
-    imageURL = "https:" + image.attrs['src'].split(" ", 1)[0]
-    urllib.request.urlretrieve(imageURL, idx)
+print(len(images))
 
-driver.quit()
+# #Downloads images using src URL
+# for idx, image in enumerate(images):
+#     imageURL = "https:" + image.attrs['src'].split(" ", 1)[0]
+#     img = Image.open(requests.get(imageURL, stream=True).raw)
+#     img.save('/Users/andrewbass/Desktop/bad_answers/tech_projects/political-logo-GAN/data/' + str(idx) + '.jpg', 'JPEG')
 
-print("AAAAAAAAAAAAA")
+# driver.quit()
+
+# print("AAAAAAAAAAAAA")
